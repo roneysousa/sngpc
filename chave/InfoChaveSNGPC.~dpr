@@ -3,7 +3,7 @@ program InfoChaveSNGPC;
 uses
   Forms,
   uFrmChave in 'uFrmChave.pas' {Form1},
-  wcrypt2 in 'Wcrypt2.pas';
+  wcrypt2 in '..\Fontes\Wcrypt2.pas';
 
 {$R *.res}
 
