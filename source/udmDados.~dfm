@@ -26,9 +26,8 @@ object dmDados: TdmDados
       'Interbase TransIsolation=ReadCommited'
       'User_Name=SYSDBA'
       'WaitOnLocks=True')
-    VendorLib = 'D:\Infog2\fbclient.dll'
+    VendorLib = 'c:\Infog2\fbclient.dll'
     BeforeConnect = sqlSNGPNBeforeConnect
-    Connected = True
     Left = 32
     Top = 16
   end
@@ -2642,7 +2641,6 @@ object dmDados: TdmDados
     Top = 416
   end
   object cdsListaTipoDocumentos: TClientDataSet
-    Active = True
     Aggregates = <>
     CommandText = 
       'Select TD.id_documento, TD.descricao from TIPO_DOCUMENTO TD ORDE' +
@@ -2663,7 +2661,6 @@ object dmDados: TdmDados
     end
   end
   object cdsListaOrgaos: TClientDataSet
-    Active = True
     Aggregates = <>
     CommandText = 
       'Select O.id_orgao, O.descricao from orgao_expedidor O ORDER BY O' +
@@ -2684,7 +2681,6 @@ object dmDados: TdmDados
     end
   end
   object cdsListaConselho: TClientDataSet
-    Active = True
     Aggregates = <>
     CommandText = 
       'Select C.id_conselho, C.descricao From conselhoprofissional C OR' +
@@ -3048,7 +3044,6 @@ object dmDados: TdmDados
     end
   end
   object cdsListaEmpresa: TClientDataSet
-    Active = True
     Aggregates = <>
     CommandText = 
       'select EM.emp_codigo, EM.emp_razao, EM.emp_fantasia FROM empresa' +
@@ -3826,7 +3821,6 @@ object dmDados: TdmDados
     end
   end
   object cdsListaUsoMedicamento: TClientDataSet
-    Active = True
     Aggregates = <>
     CommandText = 
       'Select TM.id_tipomedicamento, TM.descricao from TIPOUSOMEDICAMEN' +
@@ -3847,7 +3841,6 @@ object dmDados: TdmDados
     end
   end
   object cdsListaUsoReceituario: TClientDataSet
-    Active = True
     Aggregates = <>
     CommandText = 
       'Select TR.id_tiporeceituario, TR.descricao from tipousoreceituar' +

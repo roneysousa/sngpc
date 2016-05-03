@@ -418,7 +418,8 @@ begin
      aTextoEstoque := 'Select E.est_cdloja, E.est_cdprod, P.pro_medicamento from ESTOQUE E ';
      aTextoEstoque := aTextoEstoque + 'inner join PRODUTOS P on P.pro_rg_ms_medicamento = E.est_cdprod ';
      aTextoEstoque := aTextoEstoque + ' Where (E.est_cdloja = '+QuotedStr(InttoStr(iLoja))+' ) ';
-     // and (PRO_ANTIMICROBIANOS = '+QuotedStr('S')+') ';
+     if (aProduto <> 'T') Then
+       aTextoEstoque := aTextoEstoque + ' and (PRO_ANTIMICROBIANOS = '+QuotedStr(aProduto)+') ';
      aTextoEstoque := aTextoEstoque + ' group by E.est_cdloja, E.est_cdprod, P.pro_medicamento ';
      //
      if (iOrdem = 1) Then

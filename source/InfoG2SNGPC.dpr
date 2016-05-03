@@ -60,8 +60,8 @@ uses
 
 begin
   Application.Initialize;
-  Application.CreateForm(TdmDados, dmDados);
-  Application.CreateForm(TdmPesquisa, dmPesquisa);
-  Application.CreateForm(TfrmMain, frmMain);
+   Application.CreateForm(TdmDados, dmDados);
+   Application.CreateForm(TdmPesquisa, dmPesquisa);
+   Application.CreateForm(TfrmMain, frmMain);
   Application.Run;
 end.

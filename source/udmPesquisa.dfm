@@ -911,7 +911,7 @@ object dmPesquisa: TdmPesquisa
   object dspListaEstoque: TDataSetProvider
     DataSet = dstListaEstoque
     Options = [poAllowCommandText]
-    Left = 524
+    Left = 564
     Top = 213
   end
   object cdsListaEstoque: TClientDataSet
@@ -923,8 +923,8 @@ object dmPesquisa: TdmPesquisa
         ParamType = ptInput
       end>
     ProviderName = 'dspListaEstoque'
-    Left = 580
-    Top = 197
+    Left = 668
+    Top = 181
     object cdsListaEstoqueEST_CDLOJA: TIntegerField
       FieldName = 'EST_CDLOJA'
       Required = True
