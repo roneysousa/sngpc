@@ -1,0 +1,223 @@
+unit uFrmCadConsProfissional;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, uFrmCadastro, FMTBcd, DBCtrls, Mask, DBClient, Provider, DB,
+  SqlExpr, Buttons, Grids, DBGrids, StdCtrls, ExtCtrls, ComCtrls, jpeg;
+
+type
+  TfrmCadConsProfissional = class(TfrmCadastro)
+    Label1: TLabel;
+    dbeSigla: TDBEdit;
+    Label2: TLabel;
+    dbeDescricao: TDBEdit;
+    Label3: TLabel;
+    DBText1: TDBText;
+    cdsConsultarID_CONSELHO: TIntegerField;
+    cdsConsultarDESCRICAO: TStringField;
+    procedure FormShow(Sender: TObject);
+    procedure BtAdicionarClick(Sender: TObject);
+    procedure BtEditarClick(Sender: TObject);
+    procedure BtExcluirClick(Sender: TObject);
+    procedure BtCancelarClick(Sender: TObject);
+    procedure BtGravarClick(Sender: TObject);
+    procedure btnConsultarClick(Sender: TObject);
+    procedure edtConsultarChange(Sender: TObject);
+    procedure grdConsultarDblClick(Sender: TObject);
+  private
+    { Private declarations }
+    procedure REGISTRO;
+    Procedure BUSCAR;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCadConsProfissional: TfrmCadConsProfissional;
+
+implementation
+
+uses udmDados, uFuncoes;
+
+{$R *.dfm}
+
+{ TfrmCadConsProfissional }
+
+procedure TfrmCadConsProfissional.BUSCAR;
+begin
+     With dmDados.cdsConselhoProfissional do
+     begin
+         Close;
+         Params.ParamByName('pID_CONSELHO').AsInteger  :=
+           cdsConsultar.FieldByName('ID_CONSELHO').AsInteger;
+         Open;
+     End;
+end;
+
+procedure TfrmCadConsProfissional.REGISTRO;
+begin
+     dmDados.parametros;
+     With dmDados.cdsConselhoProfissional  do
+         begin
+              close;
+              Params.ParamByName('pID_CONSELHO').AsInteger :=
+                 uFuncoes.mvcodigo('ID_CONSELHO','CONSELHOPROFISSIONAL');
+              Open;
+         End;
+     //
+     PageControl1.ActivePageIndex := 0;
+end;
+
+procedure TfrmCadConsProfissional.FormShow(Sender: TObject);
+begin
+  inherited;
+     REGISTRO;
+     If ( dmDados.cdsConfigCFG_CONSELHO_PROFISSIONAL.AsInteger = 0) Then
+          BtAdicionarClick(Sender);
+     //
+     PageControl1.ActivePageIndex := 0;
+end;
+
+procedure TfrmCadConsProfissional.BtAdicionarClick(Sender: TObject);
+begin
+  inherited;
+  dmDados.Parametros;
+  //
+  With dmDados.cdsConselhoProfissional do
+  begin
+       Append;
+       FieldByName('ID_CONSELHO').AsInteger :=
+           dmDados.cdsConfigCFG_CONSELHO_PROFISSIONAL.AsInteger+ 1;
+  End;
+  dbeDescricao.SetFocus;
+end;
+
+procedure TfrmCadConsProfissional.BtEditarClick(Sender: TObject);
+begin 
+  if  not (dmDados.cdsConselhoProfissional.IsEmpty)
+    and (dmDados.cdsConselhoProfissional.RecordCount > 0) then
+  Begin
+       dmDados.cdsConselhoProfissional.Edit;
+       dbeDescricao.SetFocus;
+  End;
+  inherited;
+end;
+
+procedure TfrmCadConsProfissional.BtExcluirClick(Sender: TObject);
+begin
+  inherited;
+ if not (dmDados.cdsConselhoProfissional.IsEmpty) and
+     (dmDados.cdsConselhoProfissional.RecordCount > 0) then
+   begin
+       If Application.MessageBox('Deseja excluir este registro?' , 'Exclusão de registro',
+                    MB_YESNO+MB_ICONQUESTION+MB_DEFBUTTON2+MB_APPLMODAL) = ID_YES Then
+       Begin
+            dmDados.cdsConselhoProfissional.Delete;
+            dmDados.cdsConselhoProfissional.ApplyUpdates(0);
+            //
+            REGISTRO;
+       end
+       else
+            Application.MessageBox('Não ha registro a ser excluido','ATENÇÃO',
+              MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+   End;  
+end;
+
+procedure TfrmCadConsProfissional.BtCancelarClick(Sender: TObject);
+begin
+  inherited;
+     dmDados.cdsConselhoProfissional.Cancel;
+     //
+     If (dmDados.cdsConselhoProfissional.IsEmpty) Then
+       Close;
+end;
+
+procedure TfrmCadConsProfissional.BtGravarClick(Sender: TObject);
+begin
+     If uFuncoes.Empty(dbeDescricao.Text) Then
+       Begin
+           Application.MessageBox('Digite a descrição.','ATENÇÃO',
+               MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+           dbeDescricao.SetFocus;
+           Exit;
+       End;
+     //
+     If uFuncoes.Empty(dbeSigla.Text) Then
+       Begin
+           Application.MessageBox('Digite a sigla do conselho.','ATENÇÃO',
+               MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+           dbeSigla.SetFocus;
+           Exit;
+       End;
+     //
+      try
+          //
+          if (dmDados.cdsConselhoProfissional.State in [dsinsert]) then
+            begin
+                 dmDados.parametros;
+                 dmDados.CdsConfig.Edit;
+                 dmDados.cdsConfig.FieldByName('CFG_CONSELHO_PROFISSIONAL').AsInteger :=
+                      dmDados.cdsConfig.FieldByName('CFG_CONSELHO_PROFISSIONAL').AsInteger + 1;
+                 dmDados.cdsConselhoProfissional.FieldByName('ID_CONSELHO').AsInteger :=
+                      dmDados.cdsConfig.FieldByName('CFG_CONSELHO_PROFISSIONAL').AsInteger;
+                 dmDados.CdsConfig.ApplyUpdates(0);
+             end;
+          //
+          dmDados.cdsConselhoProfissional.ApplyUpdates(0);
+          //
+     Except
+          on Exc:Exception do
+            begin
+               Application.MessageBox(PChar('Error ao tentar gravar registro.'+#13
+                      + Exc.Message),
+                      'ATENÇÃO', MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+               BtCancelarClick(Sender);
+            End;
+     End;
+     //
+  inherited;
+end;
+
+procedure TfrmCadConsProfissional.btnConsultarClick(Sender: TObject);
+begin
+  inherited;
+       buscar;
+       PageControl1.ActivePageIndex := 0;
+end;
+
+procedure TfrmCadConsProfissional.edtConsultarChange(Sender: TObject);
+begin
+  inherited;
+  If not uFuncoes.Empty(edtConsultar.Text) Then
+    begin
+        cdsConsultar.Close;
+        with datasetConsultar do
+        begin
+            Active := False;
+            CommandText := 'select ID_CONSELHO, DESCRICAO from CONSELHOPROFISSIONAL ';
+            case rgConsultar.ItemIndex of
+                0: CommandText := CommandText + ' Where (ID_CONSELHO = :pID_CONSELHO)';
+                1: CommandText := CommandText + ' Where (UPPER(DESCRICAO) like :pDESCRICAO)';
+            end;
+            CommandText := CommandText + ' order by DESCRICAO';
+            case rgConsultar.ItemIndex of
+                0: datasetConsultar.Params.ParamByName('pID_CONSELHO').AsInteger := StrtoInt(edtConsultar.Text);
+                1: datasetConsultar.Params.ParamByName('pDESCRICAO').AsString   := edtConsultar.Text + '%';
+            end;
+            Active := True;
+        end;
+        cdsConsultar.FetchParams;
+        cdsConsultar.Open;
+   End;
+end;
+
+procedure TfrmCadConsProfissional.grdConsultarDblClick(Sender: TObject);
+begin
+  inherited;
+     If not (cdsConsultar.IsEmpty) Then
+         btnConsultarClick(Sender);
+end;
+
+end.

@@ -1,0 +1,214 @@
+unit uFrmCadUndFarmaco;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, uFrmCadastro, FMTBcd, DBClient, Provider, DB, SqlExpr, Buttons,
+  Grids, DBGrids, StdCtrls, ExtCtrls, ComCtrls, Mask, DBCtrls, jpeg;
+
+type
+  TfrmCadUndFarmaco = class(TfrmCadastro)
+    Label1: TLabel;
+    DBText1: TDBText;
+    Label2: TLabel;
+    dbeDescricao: TDBEdit;
+    cdsConsultarID_UND_FARMACOTECNICA: TIntegerField;
+    cdsConsultarDESCRICAO: TStringField;
+    procedure BtAdicionarClick(Sender: TObject);
+    procedure BtEditarClick(Sender: TObject);
+    procedure BtExcluirClick(Sender: TObject);
+    procedure BtCancelarClick(Sender: TObject);
+    procedure BtGravarClick(Sender: TObject);
+    procedure edtConsultarChange(Sender: TObject);
+    procedure btnConsultarClick(Sender: TObject);
+    procedure grdConsultarDblClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+    procedure REGISTRO;
+    Procedure BUSCAR;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCadUndFarmaco: TfrmCadUndFarmaco;
+
+implementation
+
+uses udmDados, uFuncoes;
+
+{$R *.dfm}
+
+{ TfrmCadUndFarmaco }
+
+procedure TfrmCadUndFarmaco.BUSCAR;
+begin
+     With dmDados.cdsUndFarmaco do
+     begin
+         Close;
+         Params.ParamByName('pID_UND_FARMACOTECNICA').AsInteger  :=
+           cdsConsultar.FieldByName('ID_UND_FARMACOTECNICA').AsInteger;
+         Open;
+     End;
+end;
+
+procedure TfrmCadUndFarmaco.REGISTRO;
+begin
+     dmDados.parametros;
+     With dmDados.cdsUndFarmaco  do
+         begin
+              close;
+              Params.ParamByName('pID_UND_FARMACOTECNICA').AsInteger :=
+                 uFuncoes.mvcodigo('ID_UND_FARMACOTECNICA','TIPO_UNIDADE_FARMACOTECNICA');
+              Open;
+         End;
+     //
+     PageControl1.ActivePageIndex := 0;
+end;
+
+procedure TfrmCadUndFarmaco.BtAdicionarClick(Sender: TObject);
+begin
+  inherited;
+  dmDados.Parametros;
+  //
+  With dmDados.cdsUndFarmaco  do
+  begin
+       Append;
+       FieldByName('ID_UND_FARMACOTECNICA').AsInteger :=
+           dmDados.cdsConfigCFG_UND_FARMACOTECNICA.AsInteger+ 1;
+  End;
+  dbeDescricao.SetFocus;
+end;
+
+procedure TfrmCadUndFarmaco.BtEditarClick(Sender: TObject);
+begin
+
+  if  not (dmDados.cdsUndFarmaco.IsEmpty)
+    and (dmDados.cdsUndFarmaco.RecordCount > 0) then
+  Begin
+       dmDados.cdsUndFarmaco.Edit;
+       dbeDescricao.SetFocus;
+  End;
+  inherited;
+end;
+
+procedure TfrmCadUndFarmaco.BtExcluirClick(Sender: TObject);
+begin
+  inherited;
+ if not (dmDados.cdsUndFarmaco.IsEmpty) and
+     (dmDados.cdsUndFarmaco.RecordCount > 0) then
+   begin
+       If Application.MessageBox('Deseja excluir este registro?' , 'Exclusão de registro',
+                    MB_YESNO+MB_ICONQUESTION+MB_DEFBUTTON2+MB_APPLMODAL) = ID_YES Then
+       Begin
+            dmDados.cdsUndFarmaco.Delete;
+            dmDados.cdsUndFarmaco.ApplyUpdates(0);
+            //
+            REGISTRO;
+       end
+       else
+            Application.MessageBox('Não ha registro a ser excluido','ATENÇÃO',
+              MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+   End;
+end;
+
+procedure TfrmCadUndFarmaco.BtCancelarClick(Sender: TObject);
+begin
+  inherited;
+     dmDados.cdsUndFarmaco.Cancel;
+     //
+     If (dmDados.cdsUndFarmaco.IsEmpty) Then
+       Close;
+end;
+
+procedure TfrmCadUndFarmaco.BtGravarClick(Sender: TObject);
+begin
+     If uFuncoes.Empty(dbeDescricao.Text) Then
+       Begin
+           Application.MessageBox('Digite a descrição.','ATENÇÃO',
+               MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+           dbeDescricao.SetFocus;
+           Exit;
+       End;
+     //
+      try
+          //
+          if (dmDados.cdsUndFarmaco.State in [dsinsert]) then
+            begin
+                 dmDados.parametros;
+                 dmDados.CdsConfig.Edit;
+                 dmDados.cdsConfig.FieldByName('CFG_UND_FARMACOTECNICA').AsInteger :=
+                      dmDados.cdsConfig.FieldByName('CFG_UND_FARMACOTECNICA').AsInteger + 1;
+                 dmDados.cdsUndFarmaco.FieldByName('ID_UND_FARMACOTECNICA').AsInteger :=
+                      dmDados.cdsConfig.FieldByName('CFG_UND_FARMACOTECNICA').AsInteger;
+                 dmDados.CdsConfig.ApplyUpdates(0);
+             end;
+          //
+          dmDados.cdsUndFarmaco.ApplyUpdates(0);
+          //
+     Except
+          on Exc:Exception do
+            begin
+               Application.MessageBox(PChar('Error ao tentar gravar registro.'+#13
+                      + Exc.Message),
+                      'ATENÇÃO', MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+               BtCancelarClick(Sender);
+            End;
+     End;
+     //
+   inherited;
+end;
+
+procedure TfrmCadUndFarmaco.edtConsultarChange(Sender: TObject);
+begin
+  inherited;
+  If not uFuncoes.Empty(edtConsultar.Text) Then
+    begin
+        cdsConsultar.Close;
+        with datasetConsultar do
+        begin
+            Active := False;
+            CommandText := 'select ID_UND_FARMACOTECNICA, DESCRICAO from TIPO_UNIDADE_FARMACOTECNICA ';
+            case rgConsultar.ItemIndex of
+                0: CommandText := CommandText + ' Where (ID_UND_FARMACOTECNICA = :pID_UND_FARMACOTECNICA)';
+                1: CommandText := CommandText + ' Where (UPPER(DESCRICAO) like :pDESCRICAO)';
+            end;
+            CommandText := CommandText + ' order by DESCRICAO';
+            case rgConsultar.ItemIndex of
+                0: datasetConsultar.Params.ParamByName('pID_UND_FARMACOTECNICA').AsInteger := StrtoInt(edtConsultar.Text);
+                1: datasetConsultar.Params.ParamByName('pDESCRICAO').AsString   := edtConsultar.Text + '%';
+            end;
+            Active := True;
+        end;
+        cdsConsultar.FetchParams;
+        cdsConsultar.Open;
+   End;
+end;
+
+procedure TfrmCadUndFarmaco.btnConsultarClick(Sender: TObject);
+begin
+  inherited;
+       buscar;
+       PageControl1.ActivePageIndex := 0;
+end;
+
+procedure TfrmCadUndFarmaco.grdConsultarDblClick(Sender: TObject);
+begin
+  inherited;
+     If not (cdsConsultar.IsEmpty) Then
+         btnConsultarClick(Sender);
+end;
+
+procedure TfrmCadUndFarmaco.FormShow(Sender: TObject);
+begin
+  inherited;
+     REGISTRO;
+     If ( dsCadastro.DataSet.IsEmpty ) Then  // dmDados.cdsConfigCFG_UND_FARMACOTECNICA.AsInteger = 0
+          BtAdicionarClick(Sender);
+     //
+     PageControl1.ActivePageIndex := 0;
+end;
+
+end.

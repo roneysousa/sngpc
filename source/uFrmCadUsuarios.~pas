@@ -1,0 +1,304 @@
+unit uFrmCadUsuarios;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, uFrmCadastro, FMTBcd, DBClient, Provider, DB, SqlExpr, Buttons,
+  Grids, DBGrids, StdCtrls, ExtCtrls, ComCtrls, Mask, DBCtrls, jpeg;
+
+type
+  TfrmCadUsuarios = class(TfrmCadastro)
+    Label2: TLabel;
+    dbeDescricao: TDBEdit;
+    DBText1: TDBText;
+    Label3: TLabel;
+    cdsConsultarSEN_CODIGO: TIntegerField;
+    cdsConsultarSEN_NOME: TStringField;
+    lbl_senha: TLabel;
+    dbeSNATUA: TEdit;
+    lbl_confirma: TLabel;
+    edt_Confirma: TEdit;
+    Label1: TLabel;
+    dbeCargo: TDBEdit;
+    procedure edtConsultarChange(Sender: TObject);
+    procedure btnConsultarClick(Sender: TObject);
+    procedure BtAdicionarClick(Sender: TObject);
+    procedure BtCancelarClick(Sender: TObject);
+    procedure BtEditarClick(Sender: TObject);
+    procedure BtExcluirClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure BtGravarClick(Sender: TObject);
+    procedure dbeSNATUAExit(Sender: TObject);
+    procedure edt_ConfirmaExit(Sender: TObject);
+    procedure grdConsultarDblClick(Sender: TObject);
+  private
+    { Private declarations }
+    procedure REGISTRO;
+    Procedure BUSCAR;
+    procedure Exibir_edites;
+    procedure Ocultar_edites;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCadUsuarios: TfrmCadUsuarios;
+
+implementation
+
+uses udmDados, uFuncoes;
+
+{$R *.dfm}
+
+{ TfrmCadUsuarios }
+
+procedure TfrmCadUsuarios.BUSCAR;
+begin
+     With dmDados.cdsUsuarios do
+     begin
+         Close;
+         Params.ParamByName('pCODIGO').AsInteger  :=
+           cdsConsultar.FieldByName('SEN_CODIGO').AsInteger;
+         Open;
+     End;
+end;
+
+procedure TfrmCadUsuarios.REGISTRO;
+begin
+     dmDados.parametros;
+     With dmDados.cdsUsuarios  do
+         begin
+              close;
+              Params.ParamByName('pCODIGO').AsInteger :=
+                 uFuncoes.mvcodigo('SEN_CODIGO','USUARIOS');
+              Open;
+         End;
+     //
+     PageControl1.ActivePageIndex := 0;
+end;
+
+procedure TfrmCadUsuarios.edtConsultarChange(Sender: TObject);
+begin
+  inherited;
+  If not uFuncoes.Empty(edtConsultar.Text) Then
+    begin
+        cdsConsultar.Close;
+        with datasetConsultar do
+        begin
+            Active := False;
+            CommandText := 'select SEN_CODIGO, SEN_NOME from USUARIOS ';
+            case rgConsultar.ItemIndex of
+                0: CommandText := CommandText + ' Where (SEN_CODIGO = :pCODIGO)';
+                1: CommandText := CommandText + ' Where (UPPER(SEN_NOME) like :pNOME)';
+            end;
+            CommandText := CommandText + ' order by SEN_NOME';
+            case rgConsultar.ItemIndex of
+                0: datasetConsultar.Params.ParamByName('pCODIGO').AsInteger := StrtoInt(edtConsultar.Text);
+                1: datasetConsultar.Params.ParamByName('pNOME').AsString   := edtConsultar.Text + '%';
+            end;
+            Active := True;
+        end;
+        cdsConsultar.FetchParams;
+        cdsConsultar.Open;
+   End;
+end;
+
+procedure TfrmCadUsuarios.btnConsultarClick(Sender: TObject);
+begin
+  inherited;
+       buscar;
+       PageControl1.ActivePageIndex := 0;
+end;
+
+procedure TfrmCadUsuarios.BtAdicionarClick(Sender: TObject);
+begin
+  inherited;
+  dmDados.Parametros;
+  //
+  With dmDados.cdsUsuarios do
+  begin
+       Append;
+       FieldByName('SEN_CODIGO').AsInteger :=
+           dmDados.cdsConfigCFG_USUARIO.AsInteger+ 1;
+  End;
+  Exibir_edites;
+  dbeDescricao.SetFocus;
+end;
+
+procedure TfrmCadUsuarios.BtCancelarClick(Sender: TObject);
+begin
+  inherited;
+      dmDados.cdsUsuarios.Cancel;
+      Ocultar_edites; 
+     //
+     If (dmDados.cdsUsuarios.IsEmpty) Then
+       Close;
+end;
+
+procedure TfrmCadUsuarios.BtEditarClick(Sender: TObject);
+begin
+  if  not (dmDados.cdsUsuarios.IsEmpty)
+    and (dmDados.cdsUsuarios.RecordCount > 0) then
+  Begin
+       dmDados.cdsUsuarios.Edit;
+       Exibir_edites;
+       dbeDescricao.SetFocus;
+  End;
+  inherited;
+end;
+
+procedure TfrmCadUsuarios.BtExcluirClick(Sender: TObject);
+begin
+  inherited;
+  if not (dmDados.cdsUsuarios.IsEmpty) and
+     (dmDados.cdsUsuarios.RecordCount > 0) then
+   begin
+       If Application.MessageBox('Deseja excluir este registro?' , 'Exclusão de registro',
+                    MB_YESNO+MB_ICONQUESTION+MB_DEFBUTTON2+MB_APPLMODAL) = ID_YES Then
+       Begin
+            dmDados.cdsUsuarios.Delete;
+            dmDados.cdsUsuarios.ApplyUpdates(0);
+            //
+            REGISTRO;
+       end
+       else
+            Application.MessageBox('Não ha registro a ser excluido','ATENÇÃO',
+              MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+   End;
+end;
+
+procedure TfrmCadUsuarios.FormShow(Sender: TObject);
+begin
+  inherited;
+     REGISTRO;
+     Ocultar_edites; 
+     If ( dmDados.cdsConfigCFG_USUARIO.AsInteger = 0) Then
+          BtAdicionarClick(Sender);
+     //
+     PageControl1.ActivePageIndex := 0;
+end;
+
+procedure TfrmCadUsuarios.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  inherited;
+      dmDados.cdsUsuarios.Close;
+      //
+      Action := caFree;
+end;
+
+procedure TfrmCadUsuarios.BtGravarClick(Sender: TObject);
+begin
+     If uFuncoes.Empty(dbeDescricao.Text) Then
+       Begin
+           Application.MessageBox('Digite o nome do médico.','ATENÇÃO',
+               MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+           dbeDescricao.SetFocus;
+           Exit;
+       End;
+     //
+     If (dmDados.cdsUsuarios.State in [dsInsert] ) Then
+     begin
+         If uFuncoes.Empty(dbeSNATUA.Text)  Then
+           Begin
+             Application.MessageBox('Digite sua senha.','ATENÇÃO',
+                 MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+             dbeSNATUA.SetFocus;
+             Exit;
+         End;
+         //
+       If uFuncoes.Empty(edt_Confirma.Text) Then
+         Begin
+             Application.MessageBox('Digite novamento sua senha.','ATENÇÃO',
+                 MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+             edt_Confirma.SetFocus;
+             Exit;
+         End;
+       End;
+     //
+      try
+          //
+          if (dmDados.cdsUsuarios.State in [dsinsert]) then
+            begin
+                 dmDados.parametros;
+                 dmDados.CdsConfig.Edit;
+                 dmDados.cdsConfig.FieldByName('CFG_USUARIO').AsInteger :=
+                      dmDados.cdsConfig.FieldByName('CFG_USUARIO').AsInteger + 1;
+                 dmDados.cdsUsuarios.FieldByName('SEN_CODIGO').AsInteger :=
+                      dmDados.cdsConfig.FieldByName('CFG_USUARIO').AsInteger;
+                 dmDados.CdsConfig.ApplyUpdates(0);
+             end;
+          //
+          dmDados.cdsUsuarios.ApplyUpdates(0);
+          Ocultar_edites; 
+          //
+     Except
+          on Exc:Exception do
+            begin
+               Application.MessageBox(PChar('Error ao tentar gravar registro.'+#13
+                      + Exc.Message),
+                      'ATENÇÃO', MB_OK+MB_ICONINFORMATION+MB_APPLMODAL);
+               BtCancelarClick(Sender);
+            End;
+     End;
+     //
+  inherited;
+end;
+
+procedure TfrmCadUsuarios.dbeSNATUAExit(Sender: TObject);
+begin
+  inherited;
+     If not uFuncoes.Empty(dbeSNATUA.Text) Then
+        dbeSNATUA.Text := dbeSNATUA.Text+uFuncoes.Replicate('_',6-uFuncoes.ContaCaracs(dbeSNATUA.Text));
+end;
+
+procedure TfrmCadUsuarios.edt_ConfirmaExit(Sender: TObject);
+begin
+  inherited;
+     If not uFuncoes.Empty(edt_Confirma.Text) Then
+     Begin
+       edt_Confirma.Text := edt_Confirma.Text+uFuncoes.Replicate('_',6-uFuncoes.ContaCaracs(edt_Confirma.Text));
+       //
+       If ( edt_Confirma.Text = dbeSNATUA.Text) Then
+            dmDados.cdsUsuariosSEN_SNATUA.AsString := uFuncoes.Codifica(edt_Confirma.Text)
+       Else
+       begin
+            Application.MessageBox( 'A senha incorreta!','ATENÇÃO',
+                          MB_OK+MB_ICONQUESTION+MB_APPLMODAL);
+            edt_Confirma.Clear;
+            edt_Confirma.SetFocus;
+            Exit;
+       End;
+  End;
+end;
+
+procedure TfrmCadUsuarios.Exibir_edites;
+begin
+     lbl_senha.Visible    := True;
+     lbl_confirma.Visible := True;
+     edt_Confirma.Visible := True;
+     dbeSNATUA.Visible    := True;
+     //
+     edt_Confirma.Clear;
+     dbeSNATUA.Clear;
+end;
+
+procedure TfrmCadUsuarios.Ocultar_edites;
+begin
+     lbl_senha.Visible    := False;
+     lbl_confirma.Visible := False;
+     //
+     edt_Confirma.Visible := False;
+     dbeSNATUA.Visible    := False;
+end;
+
+procedure TfrmCadUsuarios.grdConsultarDblClick(Sender: TObject);
+begin
+  inherited;
+     If not (cdsConsultar.IsEmpty) Then
+         btnConsultarClick(Sender);
+end;
+
+end.

@@ -1,0 +1,526 @@
+inherited frmConsultaVendas: TfrmConsultaVendas
+  Left = 405
+  Top = 163
+  Caption = 'Consulta de Vendas'
+  ClientHeight = 442
+  ClientWidth = 760
+  OldCreateOrder = True
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited Panel1: TPanel
+    Top = 401
+    Width = 760
+    inherited btnCancelar: TBitBtn
+      Visible = False
+      OnClick = btnCancelarClick
+    end
+  end
+  inherited Panel4: TPanel
+    Width = 760
+    inherited Image1: TImage
+      Width = 756
+    end
+  end
+  inherited PageControl1: TPageControl
+    Width = 760
+    Height = 380
+    inherited TabSheet1: TTabSheet
+      inherited pnlSuperior: TPanel
+        Width = 752
+        inherited Label1: TLabel
+          Caption = '&Per'#237'odo Final:'
+        end
+        inherited btnConsulta1: TBitBtn
+          OnClick = btnConsulta1Click
+        end
+      end
+      inherited grdConsultar: TDBGrid
+        Width = 752
+        Height = 198
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'ID_VENDA'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Venda'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Width = 52
+            Visible = True
+          end
+          item
+            Alignment = taRightJustify
+            Expanded = False
+            FieldName = 'DATA_VENDA'
+            Title.Caption = 'Data'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NR_NOT_MEDICAMENTO'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'N.'#186' Receita'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NOME_COMPRADOR'
+            Title.Caption = 'Cliente'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Width = 264
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'PAC_NOME'
+            Title.Caption = 'Nome do Paciente'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'PAC_DATA_NASC'
+            Title.Alignment = taCenter
+            Title.Caption = 'Dt. Nasc .Pac.'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'PAC_SEXO'
+            Title.Alignment = taCenter
+            Title.Caption = 'Sexo Pac.'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'SITUACAO'
+            Title.Alignment = taCenter
+            Title.Caption = 'ST'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'ARQUIVO'
+            Title.Alignment = taCenter
+            Title.Caption = 'Arquivo'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DATA_ARQUIVO'
+            Title.Alignment = taCenter
+            Title.Caption = 'Dt.Arquivo'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Visible = False
+          end>
+      end
+      object dbGridProdutos: TDBGrid
+        Left = 0
+        Top = 263
+        Width = 752
+        Height = 89
+        Align = alBottom
+        Ctl3D = False
+        DataSource = dsItens
+        Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        ParentCtl3D = False
+        ReadOnly = True
+        TabOrder = 2
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'MS Sans Serif'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Alignment = taRightJustify
+            Expanded = False
+            FieldName = 'REGISTRO_MS'
+            Title.Alignment = taCenter
+            Title.Caption = 'Registro MS'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Width = 100
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'PRO_MEDICAMENTO'
+            Title.Caption = 'Medicamento'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Width = 252
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NUMERO_LOTE'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'Lote'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Width = 94
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'QUANT_MEDICAMENTO'
+            Title.Alignment = taCenter
+            Title.Caption = 'Quantidade'
+            Title.Font.Charset = ANSI_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'Verdana'
+            Title.Font.Style = [fsBold]
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'USO_PROLONGADO'
+            Title.Alignment = taCenter
+            Title.Caption = 'Uso'
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clWindowText
+            Title.Font.Height = -11
+            Title.Font.Name = 'MS Sans Serif'
+            Title.Font.Style = [fsBold]
+            Visible = True
+          end>
+      end
+    end
+  end
+  inherited dstConsulta: TSQLDataSet
+    CommandText = 
+      'Select V.ID_VENDA, V.ID_LOJA, V.DATA_VENDA, V.SITUACAO, V.ARQUIV' +
+      'O, V.DATA_ARQUIVO, V.nr_not_medicamento, CL.NOME_COMPRADOR from ' +
+      'VENDAS V inner join COMPRADOR CL ON (V.ID_COMPRADOR = CL.ID_COMP' +
+      'RADOR) Where (V.DATA_VENDA >= :pINICIAL) and (V.DATA_VENDA <= :p' +
+      'FIM) order by V.DATA_VENDA'
+    Params = <
+      item
+        DataType = ftDateTime
+        Name = 'pINICIAL'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDateTime
+        Name = 'pFIM'
+        ParamType = ptInput
+      end>
+    object dstConsultaID_VENDA: TIntegerField
+      FieldName = 'ID_VENDA'
+      Required = True
+    end
+    object dstConsultaDATA_VENDA: TDateField
+      FieldName = 'DATA_VENDA'
+      Required = True
+    end
+    object dstConsultaSITUACAO: TStringField
+      FieldName = 'SITUACAO'
+      FixedChar = True
+      Size = 1
+    end
+    object dstConsultaARQUIVO: TStringField
+      FieldName = 'ARQUIVO'
+    end
+    object dstConsultaDATA_ARQUIVO: TDateField
+      FieldName = 'DATA_ARQUIVO'
+    end
+    object dstConsultaNR_NOT_MEDICAMENTO: TStringField
+      FieldName = 'NR_NOT_MEDICAMENTO'
+      FixedChar = True
+      Size = 10
+    end
+    object dstConsultaNOME_COMPRADOR: TStringField
+      FieldName = 'NOME_COMPRADOR'
+      Required = True
+      Size = 60
+    end
+  end
+  inherited cdsMedicamentos: TClientDataSet
+    CommandText = 
+      'Select V.ID_VENDA, V.ID_LOJA, V.DATA_VENDA, V.SITUACAO, V.nr_not' +
+      '_medicamento, CL.NOME_COMPRADOR, V.pac_nome, V.pac_data_nasc, V.' +
+      'pac_idade, V.pac_sexo, V.ARQUIVO, V.DATA_ARQUIVO from VENDAS V i' +
+      'nner join COMPRADOR CL ON (V.ID_COMPRADOR = CL.ID_COMPRADOR) Whe' +
+      're (V.DATA_VENDA >= :pINICIAL) and (V.DATA_VENDA <= :pFIM) order' +
+      ' by V.ID_VENDA, V.DATA_VENDA'
+    Params = <
+      item
+        DataType = ftDate
+        Name = 'pINICIAL'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'pFIM'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dspConsulta2'
+    Left = 484
+    Top = 64
+    object cdsMedicamentosID_VENDA: TIntegerField
+      FieldName = 'ID_VENDA'
+      Required = True
+      DisplayFormat = '0000000'
+    end
+    object cdsMedicamentosID_LOJA: TIntegerField
+      FieldName = 'ID_LOJA'
+      Required = True
+    end
+    object cdsMedicamentosDATA_VENDA: TDateField
+      FieldName = 'DATA_VENDA'
+      Required = True
+    end
+    object cdsMedicamentosSITUACAO: TStringField
+      FieldName = 'SITUACAO'
+      FixedChar = True
+      Size = 1
+    end
+    object cdsMedicamentosARQUIVO: TStringField
+      FieldName = 'ARQUIVO'
+    end
+    object cdsMedicamentosDATA_ARQUIVO: TDateField
+      FieldName = 'DATA_ARQUIVO'
+    end
+    object cdsMedicamentosNR_NOT_MEDICAMENTO: TStringField
+      Alignment = taRightJustify
+      FieldName = 'NR_NOT_MEDICAMENTO'
+      FixedChar = True
+      Size = 10
+    end
+    object cdsMedicamentosNOME_COMPRADOR: TStringField
+      FieldName = 'NOME_COMPRADOR'
+      Required = True
+      Size = 60
+    end
+    object cdsMedicamentosPAC_NOME: TStringField
+      FieldName = 'PAC_NOME'
+      Size = 80
+    end
+    object cdsMedicamentosPAC_DATA_NASC: TDateField
+      FieldName = 'PAC_DATA_NASC'
+    end
+    object cdsMedicamentosPAC_IDADE: TIntegerField
+      FieldName = 'PAC_IDADE'
+    end
+    object cdsMedicamentosPAC_SEXO: TStringField
+      FieldName = 'PAC_SEXO'
+      FixedChar = True
+      Size = 1
+    end
+  end
+  inherited cdsInsumos: TClientDataSet
+    CommandText = 
+      'Select V.ID_VENDA, V.NR_NOT_MEDICAMENTO, V.DATA_VENDA, V.SITUACA' +
+      'O, V. ARQUIVO, V.DATA_ARQUIVO, CL.NOME_COMPRADOR from VENDAS_INS' +
+      'UMOS V inner join COMPRADOR CL ON (V.ID_COMPRADOR = CL.ID_COMPRA' +
+      'DOR) Where (V.DATA_VENDA >= :pINICIO) and (V.DATA_VENDA <= :pFIM' +
+      ') order by V.DATA_VENDA'
+    Params = <
+      item
+        DataType = ftDate
+        Name = 'pINICIO'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftDate
+        Name = 'pFIM'
+        ParamType = ptInput
+      end>
+    object cdsInsumosID_VENDA: TIntegerField
+      FieldName = 'ID_VENDA'
+      Required = True
+      DisplayFormat = '0000000'
+    end
+    object cdsInsumosDATA_VENDA: TDateField
+      FieldName = 'DATA_VENDA'
+      Required = True
+    end
+    object cdsInsumosNOME_COMPRADOR: TStringField
+      FieldName = 'NOME_COMPRADOR'
+      Required = True
+      Size = 60
+    end
+    object cdsInsumosSITUACAO: TStringField
+      FieldName = 'SITUACAO'
+      FixedChar = True
+      Size = 1
+    end
+    object cdsInsumosARQUIVO: TStringField
+      FieldName = 'ARQUIVO'
+    end
+    object cdsInsumosDATA_ARQUIVO: TDateField
+      FieldName = 'DATA_ARQUIVO'
+    end
+    object cdsInsumosNR_NOT_MEDICAMENTO: TStringField
+      FieldName = 'NR_NOT_MEDICAMENTO'
+      FixedChar = True
+      Size = 10
+    end
+  end
+  inherited dsMedicamentos: TDataSource
+    OnDataChange = dsMedicamentosDataChange
+  end
+  object dspProdutos: TSQLDataSet
+    CommandText = 
+      'Select VP.ID_VENDA, VP.REGISTRO_MS, P.pro_medicamento, VP.NUMERO' +
+      '_LOTE, VP.QUANT_MEDICAMENTO, VP.uso_prolongado from VENDAS_MEDIC' +
+      'AMENTOS VP'#13#10'INNER JOIN PRODUTOS P ON P.pro_rg_ms_medicamento = V' +
+      'P.REGISTRO_MS'#13#10'Where (ID_VENDA = :pID_VENDA)'#13#10
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pID_VENDA'
+        ParamType = ptInput
+      end>
+    SQLConnection = dmDados.sqlSNGPN
+    Left = 308
+    Top = 173
+  end
+  object dspItensVenda: TDataSetProvider
+    DataSet = dspProdutos
+    Options = [poAllowCommandText]
+    Left = 348
+    Top = 173
+  end
+  object cdsItensVenda: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'pID_VENDA'
+        ParamType = ptInput
+      end>
+    ProviderName = 'dspItensVenda'
+    Left = 396
+    Top = 173
+    object cdsItensVendaID_VENDA: TIntegerField
+      FieldName = 'ID_VENDA'
+      Required = True
+    end
+    object cdsItensVendaREGISTRO_MS: TStringField
+      FieldName = 'REGISTRO_MS'
+      Required = True
+      EditMask = '#.####.####.###-#;0;_'
+      FixedChar = True
+      Size = 13
+    end
+    object cdsItensVendaPRO_MEDICAMENTO: TStringField
+      FieldName = 'PRO_MEDICAMENTO'
+      Required = True
+      Size = 50
+    end
+    object cdsItensVendaNUMERO_LOTE: TStringField
+      Alignment = taRightJustify
+      FieldName = 'NUMERO_LOTE'
+      FixedChar = True
+      Size = 10
+    end
+    object cdsItensVendaQUANT_MEDICAMENTO: TBCDField
+      FieldName = 'QUANT_MEDICAMENTO'
+      Precision = 9
+      Size = 3
+    end
+    object cdsItensVendaUSO_PROLONGADO: TStringField
+      FieldName = 'USO_PROLONGADO'
+      FixedChar = True
+      Size = 1
+    end
+  end
+  object dsItens: TDataSource
+    DataSet = cdsItensVenda
+    Left = 444
+    Top = 181
+  end
+  object dstConsultar2: TSQLDataSet
+    CommandText = 
+      'Select V.ID_VENDA, V.ID_LOJA, V.DATA_VENDA, V.SITUACAO, V.nr_not' +
+      '_medicamento, CL.NOME_COMPRADOR, V.pac_nome, V.pac_data_nasc, V.' +
+      'pac_idade, V.pac_sexo, V.ARQUIVO, V.DATA_ARQUIVO from VENDAS V i' +
+      'nner join COMPRADOR CL ON (V.ID_COMPRADOR = CL.ID_COMPRADOR) Whe' +
+      're (V.DATA_VENDA >= :pINICIAL) and (V.DATA_VENDA <= :pFIM) order' +
+      ' by V.DATA_VENDA'
+    MaxBlobSize = -1
+    Params = <
+      item
+        DataType = ftDate
+        Name = 'pINICIAL'
+        ParamType = ptInput
+      end
+      item
+        DataType = ftDate
+        Name = 'pFIM'
+        ParamType = ptInput
+      end>
+    SQLConnection = dmDados.sqlSNGPN
+    Left = 404
+    Top = 61
+  end
+  object dspConsulta2: TDataSetProvider
+    DataSet = dstConsultar2
+    Options = [poAllowCommandText]
+    Left = 444
+    Top = 61
+  end
+end

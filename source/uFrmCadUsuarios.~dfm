@@ -1,0 +1,170 @@
+inherited frmCadUsuarios: TfrmCadUsuarios
+  Left = 204
+  Caption = 'Cadastro de Usu'#225'rios'
+  ClientWidth = 587
+  OldCreateOrder = True
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited PageControl1: TPageControl
+    Width = 587
+    inherited TabSheet1: TTabSheet
+      object Label2: TLabel [0]
+        Left = 13
+        Top = 64
+        Width = 31
+        Height = 13
+        Caption = 'Nome:'
+        FocusControl = dbeDescricao
+      end
+      object DBText1: TDBText [1]
+        Left = 13
+        Top = 32
+        Width = 79
+        Height = 22
+        AutoSize = True
+        DataField = 'SEN_CODIGO'
+        DataSource = dsCadastro
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -19
+        Font.Name = 'Arial'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = True
+      end
+      object Label3: TLabel [2]
+        Left = 13
+        Top = 8
+        Width = 33
+        Height = 13
+        Caption = 'C'#243'digo'
+        Transparent = True
+      end
+      object lbl_senha: TLabel [3]
+        Left = 13
+        Top = 146
+        Width = 34
+        Height = 13
+        Caption = 'Senha:'
+        Transparent = True
+      end
+      object lbl_confirma: TLabel [4]
+        Left = 13
+        Top = 186
+        Width = 44
+        Height = 13
+        Caption = 'Confirma:'
+        Transparent = True
+      end
+      object Label1: TLabel [5]
+        Left = 13
+        Top = 106
+        Width = 31
+        Height = 13
+        Caption = 'Cargo:'
+        FocusControl = dbeCargo
+        Transparent = True
+      end
+      inherited Panel1: TPanel
+        Width = 579
+        TabOrder = 4
+      end
+      object dbeDescricao: TDBEdit
+        Left = 13
+        Top = 80
+        Width = 524
+        Height = 21
+        CharCase = ecUpperCase
+        DataField = 'SEN_NOME'
+        DataSource = dsCadastro
+        TabOrder = 0
+      end
+      object dbeSNATUA: TEdit
+        Left = 13
+        Top = 162
+        Width = 82
+        Height = 21
+        MaxLength = 6
+        PasswordChar = '*'
+        TabOrder = 2
+        OnExit = dbeSNATUAExit
+      end
+      object edt_Confirma: TEdit
+        Left = 13
+        Top = 202
+        Width = 82
+        Height = 21
+        MaxLength = 6
+        PasswordChar = '*'
+        TabOrder = 3
+        OnExit = edt_ConfirmaExit
+      end
+      object dbeCargo: TDBEdit
+        Left = 13
+        Top = 122
+        Width = 394
+        Height = 21
+        CharCase = ecUpperCase
+        DataField = 'SEN_CARGO'
+        DataSource = dsCadastro
+        TabOrder = 1
+      end
+    end
+    inherited TabSheet2: TTabSheet
+      inherited Panel2: TPanel
+        Width = 579
+      end
+      inherited grdConsultar: TDBGrid
+        Width = 545
+        DataSource = dsConsultar
+        Columns = <
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'SEN_CODIGO'
+            Title.Alignment = taCenter
+            Title.Caption = 'CODIGO'
+            Width = 61
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'SEN_NOME'
+            Title.Caption = 'NOME'
+            Width = 428
+            Visible = True
+          end>
+      end
+      inherited Panel3: TPanel
+        Left = 545
+      end
+    end
+  end
+  inherited Panel4: TPanel
+    Width = 587
+    inherited Image1: TImage
+      Width = 583
+    end
+  end
+  inherited datasetConsultar: TSQLDataSet
+    CommandText = 'select SEN_CODIGO, SEN_NOME from USUARIOS'
+    MaxBlobSize = -1
+    SQLConnection = dmDados.sqlSNGPN
+  end
+  inherited cdsConsultar: TClientDataSet
+    object cdsConsultarSEN_CODIGO: TIntegerField
+      FieldName = 'SEN_CODIGO'
+      Required = True
+      DisplayFormat = '000'
+    end
+    object cdsConsultarSEN_NOME: TStringField
+      FieldName = 'SEN_NOME'
+      Size = 40
+    end
+  end
+  inherited dsCadastro: TDataSource
+    DataSet = dmDados.cdsUsuarios
+  end
+end
