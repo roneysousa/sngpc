@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="ValidarUsuario">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Senha" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ValidarUsuarioResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ValidarUsuarioResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnviaArquivoSNGPC">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Senha" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Arq" type="s:base64Binary" />
+            <s:element minOccurs="0" maxOccurs="1" name="HashIdentificacao" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnviaArquivoSNGPCResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EnviaArquivoSNGPCResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConsultaDadosArquivoSNGPC">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Email" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Senha" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="CNPJ" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="Hash" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConsultaDadosArquivoSNGPCResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ConsultaDadosArquivoSNGPCResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ValidarUsuarioSoapIn">
+    <wsdl:part name="parameters" element="tns:ValidarUsuario" />
+  </wsdl:message>
+  <wsdl:message name="ValidarUsuarioSoapOut">
+    <wsdl:part name="parameters" element="tns:ValidarUsuarioResponse" />
+  </wsdl:message>
+  <wsdl:message name="EnviaArquivoSNGPCSoapIn">
+    <wsdl:part name="parameters" element="tns:EnviaArquivoSNGPC" />
+  </wsdl:message>
+  <wsdl:message name="EnviaArquivoSNGPCSoapOut">
+    <wsdl:part name="parameters" element="tns:EnviaArquivoSNGPCResponse" />
+  </wsdl:message>
+  <wsdl:message name="ConsultaDadosArquivoSNGPCSoapIn">
+    <wsdl:part name="parameters" element="tns:ConsultaDadosArquivoSNGPC" />
+  </wsdl:message>
+  <wsdl:message name="ConsultaDadosArquivoSNGPCSoapOut">
+    <wsdl:part name="parameters" element="tns:ConsultaDadosArquivoSNGPCResponse" />
+  </wsdl:message>
+  <wsdl:portType name="sngpcSoap">
+    <wsdl:operation name="ValidarUsuario">
+      <wsdl:input message="tns:ValidarUsuarioSoapIn" />
+      <wsdl:output message="tns:ValidarUsuarioSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EnviaArquivoSNGPC">
+      <wsdl:input message="tns:EnviaArquivoSNGPCSoapIn" />
+      <wsdl:output message="tns:EnviaArquivoSNGPCSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultaDadosArquivoSNGPC">
+      <wsdl:input message="tns:ConsultaDadosArquivoSNGPCSoapIn" />
+      <wsdl:output message="tns:ConsultaDadosArquivoSNGPCSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="sngpcSoap" type="tns:sngpcSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ValidarUsuario">
+      <soap:operation soapAction="http://tempuri.org/ValidarUsuario" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnviaArquivoSNGPC">
+      <soap:operation soapAction="http://tempuri.org/EnviaArquivoSNGPC" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultaDadosArquivoSNGPC">
+      <soap:operation soapAction="http://tempuri.org/ConsultaDadosArquivoSNGPC" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="sngpc">
+    <wsdl:port name="sngpcSoap" binding="tns:sngpcSoap">
+      <soap:address location="http://sngpc.anvisa.gov.br/webservice/sngpc.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
