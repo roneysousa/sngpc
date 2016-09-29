@@ -49,9 +49,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FirebirdSql.Data.FirebirdClient, Version=4.0.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FirebirdSql.Data.FirebirdClient.4.0.0.0\lib\net40-client\FirebirdSql.Data.FirebirdClient.dll</HintPath>
+    <Reference Include="FirebirdSql.Data.FirebirdClient">
+      <HintPath>..\packages\FirebirdSql.Data.FirebirdClient.4.10.0.0\lib\net40-client\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>D:\Sistemas\DotNetZipLib-DevKit-v1.9\Tools\Ionic.Zip.dll</HintPath>
@@ -72,7 +71,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="daoFirebird.cs" />
-    <Compile Include="FbCommand.cs" />
+    <Compile Include="FbCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FbConnectionString.cs" />
     <Compile Include="FrmEnviarSNGPC.cs">
       <SubType>Form</SubType>
